@@ -25,7 +25,7 @@ var addresses = [];
 
 var suffixes = ['credits', 'peso', 'dollar', 'yuan', 'yen', 'pound', 'schilling', 'won'];
 
-var address = 'n4Po8andi3akpQBxzBWXbQBttF9LueXqyo'
+var address = 'n4Po8andi3akpQBxzBWXbQBttF9LueXqyo';
 
 var address2 = '';
 
@@ -112,7 +112,7 @@ function nameGen() {
     ];
     var vowels = ['a', 'e', 'i', 'o', 'u'];
     var max = Math.round(Math.random() * 3) + 2;
-    var newName = ''
+    var newName = '';
     for (var letter = 0; letter < max; letter++) {
         var rand = Math.round(Math.random() * 25);
         var newLetter = '';
@@ -141,9 +141,9 @@ function newProperty(cb) {
         array = array.sort(function(a, b) {
             a - b;
         });
-        var value = data.length-1;
+        var value = data.length - 1;
         id = data[value].propertyid;
-        console.log('id:'+id);
+        console.log('id:' + id);
 
         fs.writeFile('omnitestproperties.json', obj, function(err) {
             if (err) {
@@ -160,21 +160,21 @@ function issueManaged() {
 
     var params = {
         fromaddress: address,
-        ecosystem: 2, 
-        type: 2, 
+        ecosystem: 2,
+        type: 2,
         previousid: 0,
-        category: 'Fictional Currency', 
-        subcategory: 'Feeat', 
-        name: newName, 
+        category: 'Fictional Currency',
+        subcategory: 'Feeat',
+        name: newName,
         url: 'BancoFee.fu',
         data: data
     };
 
     Omni.sendissuancemanaged(params, function(data) {
         //console.log('issueance cb'+data)
-        newProperty(function(id){
+        newProperty(function(id) {
             console.log('id check' + id);
-            Omni.sendgrant(address, address, id, '1000000', 'blah!', function(data){
+            Omni.sendgrant(address, address, id, '1000000', 'blah!', function(data) {
                 //console.log('initial grant:'+data)
             });
         });
@@ -197,14 +197,17 @@ function nextOrder(id1) {
             amountdesired: rand2,
             time: Date.now(),
             result: data
-        if(nthTrade<ids.length){
-            console.log('recording'+JSON.stringify(trade));
+        };
+        if (nthTrade < ids.length) {
+            console.log('recording' + JSON.stringify(trade));
             trades.push(trade);
-        }else{return null;}
+        } else {
+            return null;
+        }
         //console.log('Trade'+data)
         nthTrade += 1;
         nextOrder(ids[nthTrade]);
-    }); 
+    });
 }
 
 /*Omni.sendgrant(address, address, id1, rand, "blah!", function(data){
@@ -220,9 +223,12 @@ function orderBooks() {
         } else {
             Omni.getorderbook(id1, id2, function(data) {
                 //console.log("Book"+JSON.stringify(data))
-            if(data == undefined){}else{
-                STP.books.push(makeBook(data));
-            }});}
+                if (data == undefined) {
+                } else {
+                    STP.books.push(makeBook(data));
+                }
+            });
+        }
         //console.log(STP.books)
     }
 }
@@ -248,7 +254,7 @@ function makeBook(data) {
 
         var amtSale = parseFloat(order['amountforsale']);
         var amtDesired = parseFloat(order['amountdesired']);
-        var unitPrice = amtSale/amtDesired;
+        var unitPrice = amtSale / amtDesired;
         var bookEntry = [amtSale, unitPrice];
         book.asks.push(bookEntry);
     }
@@ -279,18 +285,19 @@ function loop(cb) {
     nextOrder(ids[nthTrade]);
     setTimeout(function() {
         //issueManaged()
-        Omni.getallbalancesforaddress(address,function(data){
+        Omni.getallbalancesforaddress(address, function(data) {
             balances = data;
             console.log(data);
-            for(var i=2; i<data.length; i++){
+            for (var i = 2; i < data.length; i++) {
                 ids.push(balances[i]['propertyid']);
             }
         });
-        fs.writeFile('testTrades.json',JSON.stringify(trades), function(err){if(err)throw err;});
+        fs.writeFile('testTrades.json', JSON.stringify(trades), function(err) {
+            if (err) throw err;
+        });
 
         loop();
     }, 60000);
-    
 }
 //setTimeout(function(){loop()}, 2000)
 
