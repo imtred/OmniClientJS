@@ -28,13 +28,40 @@ router.get('/getnewaddress', (req, res, next) => {
 });
 
 /**
- * Check the balance on address
- * @return 200 Check the balance on address success
- * @return 409 Check the balance on address failed
+ * Get the balance for address
+ * @return 200 Get the balance for address success
+ * @return 409 Get the balance for address failed
+ * @return 422 Validation failed
+ */
+router.get('/getbalance', (req, res, next) => {
+    req.checkQuery('address', 'Invalid address - should not be empty').notEmpty();
+    req.checkQuery('propertyId', 'Invalid address - should not be empty').notEmpty();
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+        return next(new ValidationError(errors));
+    }
+
+    const params = req.query;
+
+    omniClientService.getBalance(omniClientMapper.getBalanceToRequest(params), (ids, err) => {
+        if (err) {
+            console.log(`[GET] /api/omniclient/getbalance ERROR ==> ${err.errors}`);
+            return next(err);
+        }
+        res.status(200).json(ids);
+    });
+});
+
+/**
+ * Get all balances for address
+ * @return 200 Get all balances for address success
+ * @return 409 Get all balances for address failed
  * @return 422 Validation failed
  */
 router.get('/getallbalancesforaddress', (req, res, next) => {
-    ctx.checkQuery('address', 'Invalid address - should not be empty').notEmpty();
+    req.checkQuery('address', 'Invalid address - should not be empty').notEmpty();
     const errors = req.validationErrors();
 
     if (errors) {
@@ -63,11 +90,13 @@ router.get('/getallbalancesforaddress', (req, res, next) => {
  * @return 409 Send Tether failed
  * @return 422 Validation failed
  */
-router.get('/sendtether', (req, res, next) => {
-    ctx.checkQuery('address1', 'Invalid address1 - should not be empty').notEmpty();
-    ctx.checkQuery('address2', 'Invalid address2 - should not be empty').notEmpty();
-    ctx.checkQuery('id', 'Invalid id - should not be empty').notEmpty();
-    ctx.checkQuery('amount', 'Invalid amount - should not be empty').notEmpty();
+router.post('/sendtether', (req, res, next) => {
+    req.checkBody('address1', 'Invalid address1 - should not be empty').notEmpty();
+    req.checkBody('address2', 'Invalid address2 - should not be empty').notEmpty();
+    req.checkBody('id', 'Invalid id - should not be empty').notEmpty();
+    req.checkBody('amount', 'Invalid amount - should not be empty').notEmpty();
+    req.checkBody('id', 'Invalid id - shouldn not be symbolic').isNumeric();
+    req.checkBody('amount', 'Invalid amount - shouldn be symbolic').isString();
     const errors = req.validationErrors();
 
     if (errors) {
@@ -78,7 +107,7 @@ router.get('/sendtether', (req, res, next) => {
 
     omniClientService.sendTether(omniClientMapper.sendTetherToRequest(params), (data, err) => {
         if (err) {
-            console.log(`[GET] /api/omniclient/getallbalancesforaddress ERROR ==> ${err.errors}`);
+            console.log(`[POST] /api/omniclient/sendtether ERROR ==> ${err.errors}`);
             return next(err);
         }
         res.status(200).json(data);

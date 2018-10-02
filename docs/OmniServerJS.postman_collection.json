@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "977bd8a1-aa94-4dbc-9902-f78a000ca96b",
+		"name": "OmniServerJS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"_postman_id": "bed14152-f5ee-49bb-924d-ec5b5a029524",
+			"name": "Get new address",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{url}}/omniclient/getnewaddress",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"omniclient",
+						"getnewaddress"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "2d6679be-d73c-4d99-8af0-e877a325f915",
+			"name": "Get balance for address",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{url}}/omniclient/getbalance?address=19zCTxmriTJgScG1Cz2BA3YBApSnBPR6Pz",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"omniclient",
+						"getbalance"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "19zCTxmriTJgScG1Cz2BA3YBApSnBPR6Pz"
+						}
+					]
+				},
+				"description": "Success address axample: 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P"
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "9ef36992-4d5d-4861-b878-ac878f6a5d0d",
+			"name": "Get all balances for address",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{url}}/omniclient/getallbalancesforaddress?address=17X59hahL9QyJ1PHx2y3g3XZ7ngGg5MdVv",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"omniclient",
+						"getallbalancesforaddress"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "17X59hahL9QyJ1PHx2y3g3XZ7ngGg5MdVv"
+						}
+					]
+				},
+				"description": "Success address axample: 1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P"
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "3b46e164-18b0-4de8-ad90-183346ddd168",
+			"name": "Send tether from address to address",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"address1\": \"1PHuHdxXKfrUDS1ytj1gAqV9sf3iKZZuZx\",\n\t\"address2\": \"18uLYpHLaeNyNRwdUD7rBAkB2X8spKk2iT\",\n\t\"id\": 31,\n\t\"amount\": 1\n}"
+				},
+				"url": {
+					"raw": "{{url}}/omniclient/sendtether",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"omniclient",
+						"sendtether"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

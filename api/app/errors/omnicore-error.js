@@ -4,7 +4,10 @@ class OmniCoreError extends Error {
         super(message);
         this.status = 409;
         this.message = message;
-        this.errors = errors;
+        this.errors = {
+            code: errors.code,
+            desc: errors.message
+        };
     }
 }
 

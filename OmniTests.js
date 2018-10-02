@@ -6,12 +6,7 @@ var configurationFile = 'configuration.json';
 var configuration = JSON.parse(fs.readFileSync(configurationFile));
 
 // Save client in a variable, even though all calss are made through the Omni object
-var testClient = Omni.init(
-    configuration.rpcuser,
-    configuration.rpcpassword,
-    '192.168.0.245',
-    false
-);
+var testClient = Omni.init(configuration.rpcuser, configuration.rpcpassword, null, true);
 
 var account;
 
@@ -61,25 +56,14 @@ Omni.getnewaddress(account, function(newAddress) {
     trades = JSON.parse(data)
 })*/
 
-setTimeout(function() {
-    Omni.getallbalancesforaddress(address2, function(data) {
-        balances = data;
-        //console.log(balances)
-        for (var i = 2; i < data.length; i++) {
-            ids.push(balances[i]['propertyid']);
-        }
-        console.log(ids);
-    });
-}, 10000);
-
-// Omni.getallbalancesforaddress(address,function(data){
-//     balances = data
-//     //console.log(balances)
-//     for(var i=2; i<data.length; i++){
-//     ids.push(balances[i]['propertyid'])
-//     }
-//     console.log(ids)
-// })
+Omni.getallbalancesforaddress(address, function(data) {
+    balances = data;
+    //console.log(balances)
+    for (var i = 2; i < data.length; i++) {
+        ids.push(balances[i]['propertyid']);
+    }
+    console.log(ids);
+});
 
 function nameGen() {
     var alphabet = [
@@ -198,6 +182,7 @@ function nextOrder(id1) {
             time: Date.now(),
             result: data
         };
+
         if (nthTrade < ids.length) {
             console.log('recording' + JSON.stringify(trade));
             trades.push(trade);
@@ -211,8 +196,8 @@ function nextOrder(id1) {
 }
 
 /*Omni.sendgrant(address, address, id1, rand, "blah!", function(data){
-                console.log('grant'+t+JSON.stringify(data))
-                })*/
+console.log('grant'+t+JSON.stringify(data))
+})*/
 
 function orderBooks() {
     for (var p = 2; p < length; p++) {
@@ -240,6 +225,7 @@ function makeBook(data) {
         var order = data[i];
         var id1 = order['propertyidforsale'];
         var name1 = '';
+
         Omni.getproperty(id1, function(data1) {
             name1 = data1['name'];
             book.name = name1;
@@ -273,13 +259,12 @@ function makeBook(data) {
     }
     array = array.sort(function(a,b){a-b})
     var value = array.length - 1
-    
-    
+
+
     fs.writeFile('omnitestproperties.json', obj, function(err){
         if(err){throw err}
     })
 })*/
-
 function loop(cb) {
     nthTrade = 0;
     nextOrder(ids[nthTrade]);
@@ -299,7 +284,9 @@ function loop(cb) {
         loop();
     }, 60000);
 }
-//setTimeout(function(){loop()}, 2000)
+setTimeout(function() {
+    loop();
+}, 2000);
 
 /*
 Array.prototype.pairs = function (func) {
@@ -311,7 +298,6 @@ Array.prototype.pairs = function (func) {
     }
     return func(pairs)
 }
-
 function selectCat(sub, cb){
     var array = []
 for(var i = 0; i< STP.properties.length; i++){
@@ -331,76 +317,67 @@ for(var i = 0; i< STP.properties.length; i++){
     STP = JSON.parse(data)
     console.log(STP)
 })
-
-    var params = {fromaddress: address, 
-                    ecosystem: 2, 
-                    type: 1, 
+    var params = {fromaddress: address,
+                    ecosystem: 2,
+                    type: 1,
                     previousid: 0,
-                    category: "Relic", 
-                    subcategory: "Dense", 
-                    name: "Unliftable Gem", 
+                    category: "Relic",
+                    subcategory: "Dense",
+                    name: "Unliftable Gem",
                     url: "www.seektherelic.org",
                     data: "These materials are primal, forged from spacetime. May bestow powers, makes a great paperweight.",
-                    amount: "7", 
-                    tokensperunit: "1", 
-                    deadline: 1454114063, 
-                    earlybonus: 1,
-                    issuerpercentage:42
-                }
-                
-    var params2 = {fromaddress: address, 
-                    ecosystem: 2, 
-                    type: 1, 
-                    previousid: 0,
-                    category: "Relic", 
-                    subcategory: "Dense", 
-                    name: "Unliftable Gem", 
-                    url: "www.seektherelic.org",
-                    data: "These materials are primal, forged from spacetime. May bestow powers, makes a great paperweight.",
-                    amount: "7", 
-                    tokensperunit: "1", 
-                    deadline: 1454114063, 
+                    amount: "7",
+                    tokensperunit: "1",
+                    deadline: 1454114063,
                     earlybonus: 1,
                     issuerpercentage:42
                 }
 
+    var params2 = {fromaddress: address,
+                    ecosystem: 2,
+                    type: 1,
+                    previousid: 0,
+                    category: "Relic",
+                    subcategory: "Dense",
+                    name: "Unliftable Gem",
+                    url: "www.seektherelic.org",
+                    data: "These materials are primal, forged from spacetime. May bestow powers, makes a great paperweight.",
+                    amount: "7",
+                    tokensperunit: "1",
+                    deadline: 1454114063,
+                    earlybonus: 1,
+                    issuerpercentage:42
+                }
 //Omni.sendissuancefixed(params, function(data){
 //    console.log("fixed issuance:"+ data)
 //})
 /*var balance
-
 Omni.getbalance(address, 2, function(data){
     console.log(data)
     balance = parseFloat(data)
 })
-
 var book
-
 Omni.getorderbook(2, 8, function(data){
-
-    console.log(data)    
+    console.log(data)
     book = data
 })
-
-
 Omni.sendtoaddress("n4Po8andi3akpQBxzBWXbQBttF9LueXqyo", .01, function(data){
     console.log(data)
 })
-
 Omni.getomnibalance(address, 1, function(data){
     console.log(data)
 })*/
 
 /*Omni.getaccountaddress('',function(data){
-    //console.log(data)
-    account = data
-     addresses.push(address)
-     wallet =  {addresses: addresses,account:account}
-     //console.log(wallet)
-     Omni.validateaddress(addresses[0], function(data){
-         //console.log(data)
-     })
-    })*/
+//console.log(data)
+account = data
+ addresses.push(address)
+ wallet =  {addresses: addresses,account:account}
+ //console.log(wallet)
+ Omni.validateaddress(addresses[0], function(data){
+     //console.log(data)
+ })
+})*/
 
 //Omni.getactivecrowdsales_layer(function(data){
 //    console.log(data)
@@ -409,7 +386,6 @@ Omni.getomnibalance(address, 1, function(data){
 /*Omni.getactivedexsells_layer(function(data){
     //console.log(data)
 })
-
 Omni.getgrants_layer(23, function(data){
     console.log("grants"+data)
 })

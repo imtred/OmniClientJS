@@ -8,6 +8,15 @@ class OmniServerMapper {
     /**
      * Requests
      */
+    getBalanceToRequest(params) {
+        let propertyId = _.get(params, 'propertyId', '') || '';
+        if (propertyId) propertyId = parseInt(propertyId);
+        return {
+            address: _.get(params, 'address', '') || '',
+            propertyId: propertyId
+        };
+    }
+
     getAllBalancesForAddressToRequest(params) {
         return {
             address: _.get(params, 'address', '') || ''
@@ -27,17 +36,19 @@ class OmniServerMapper {
      * Responses
      */
     getNewAddressToResponse(address) {
-        return { address: address };
+        return address;
     }
 
-    getAllBalancesForAddressToResponse(ids) {
-        return { ids: ids };
+    getBalanceToResponse(balance) {
+        return balance;
     }
 
     sendTetherToRequest(data) {
-        return {
-            data: data
-        };
+        return data;
+    }
+
+    getWalletAddressBalancesToResponse(data) {
+        return data;
     }
 }
 

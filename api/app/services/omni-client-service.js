@@ -19,7 +19,7 @@ class OmniServerService {
             } else {
                 account = accounts[0];
                 Omni.getnewaddress(account, (newAddress, err) => {
-                    if (err) return new cb(null, new OmniCoreError(err));
+                    if (err) return cb(null, new OmniCoreError(err));
                     else {
                         address = newAddress;
                         return cb(omniClientMapper.getNewAddressToResponse(address));
@@ -29,24 +29,24 @@ class OmniServerService {
         });
     }
 
-    async getAllBalancesForAddress(params, cb) {
-        let balances = null;
-        let ids = [];
-
-        Omni.getallbalancesforaddress(params.address, (data, err) => {
-            if (err) return new cb(null, new OmniCoreError(err));
-            balances = data;
-            for (let i = 2; i < data.length; i++) {
-                ids.push(balances[i]['propertyid']);
-            }
-            return cb(omniClientMapper.getAllBalancesForAddressToResponse(ids));
+    getBalance(params, cb) {
+        Omni.getomnibalance(params.address, params.propertyId, (balance, err) => {
+            if (err) return cb(null, new OmniCoreError(err));
+            return cb(omniClientMapper.getBalanceToResponse(balance));
         });
     }
 
-    async sendTether(params, cb) {
-        Omni.send(params.address1, params.address2, params.id, params.amount, (data, err) => {
-            if (err) return new cb(null, new OmniCoreError(err));
+    getAllBalancesForAddress(params, cb) {
+        Omni.getallbalancesforaddress(params.address, (data, err) => {
+            if (err) return cb(null, new OmniCoreError(err));
             return cb(omniClientMapper.getAllBalancesForAddressToResponse(data));
+        });
+    }
+
+    sendTether(params, cb) {
+        Omni.send(params.address1, params.address2, params.id, params.amount, (data, err) => {
+            if (err) return cb(null, new OmniCoreError(err));
+            return cb(omniClientMapper.getWalletAddressBalancesToResponse(data));
         });
     }
 }
