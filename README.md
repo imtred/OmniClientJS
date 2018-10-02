@@ -25,36 +25,15 @@ There are a few `bitcoin.conf` settings that are necessary to run these tests.
     rpcuser=test-username-goes-here
     rpcpassword=test-password-goes-here
 
-
-
 ## Configure your client
 
 1. Copy the sample configuration: `$ cp sample-configuration.json configuration.json`
 1. Edit `configuration.json` and set the correct RPC username and password
 
-## Run QuickReadTests
-
-These tests will make read-only calls via RPC to make sure that the Node Omni RPC client can
-connect to the Omni Core server.
-
-```sh
-$ node QuickReadTests.js
-```
-
-## Run OmniTests
-
-These tests will spend Bitcoin to make Omni DEX trades. They are still a work in progress. Proceed
-with caution.
-
-```sh
-$ node OmniTests.js
-```
-
 ## Run OmniTradeJS API ##
 ```sh
 $ npm run start
 ```
-
 
 ## OmniTradeJS API
 
@@ -129,3 +108,21 @@ Node.js API for communicating with OmniCore platform
 **Result:**
 
     "4391549079de6f2bb7eecb24641ba7ad5c6ad29e50addddc72dbd2cb0c76d0e3"
+
+## Run QuickReadTests
+
+These tests will make read-only calls via RPC to make sure that the Node Omni RPC client can
+connect to the Omni Core server.
+
+```sh
+$ node QuickReadTests.js
+```
+
+## Run OmniTests
+
+These tests will spend Bitcoin to make Omni DEX trades. They are still a work in progress. Proceed
+with caution.
+
+```sh
+$ node OmniTests.js
+```
